@@ -8,9 +8,15 @@ export function validate(schema) {
     if (!parsed.success) {
       return next(parsed.error);
     }
-    req.body = parsed.data.body ?? req.body;
-    req.params = parsed.data.params ?? req.params;
-    req.query = parsed.data.query ?? req.query;
+    if (parsed.data.body !== undefined) req.body = parsed.data.body;
+    if (parsed.data.params !== undefined) req.params = parsed.data.params;
+    if (parsed.data.query !== undefined) {
+      Object.defineProperty(req, "query", {
+        value: parsed.data.query,
+        writable: true,
+        configurable: true,
+      });
+    }
     next();
   };
 }
