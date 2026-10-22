@@ -49,6 +49,17 @@ export function LoginPage() {
         <Button className="mt-5 w-full" variant="gradient" disabled={busy}>
           {busy ? "Signing in…" : "Log in"}
         </Button>
+        <Button
+          type="button"
+          variant="secondary"
+          className="mt-2 w-full"
+          onClick={() => {
+            setEmail("demo@socialconnect.dev");
+            setPassword("Password123!");
+          }}
+        >
+          Auto-fill Demo Account
+        </Button>
         <p className="mt-4 text-center text-sm">
           New here?{" "}
           <Link className="text-primary" to="/register">

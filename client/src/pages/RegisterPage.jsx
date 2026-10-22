@@ -45,9 +45,9 @@ export function RegisterPage() {
             type="password"
             value={form.password}
             onChange={(e) => set("password", e.target.value)}
-            placeholder="Password (8+ characters)"
+            placeholder="Password (6+ characters)"
             required
-            minLength={8}
+            minLength={6}
           />
         </div>
         {error && <p className="mt-3 text-sm text-destructive">{error}</p>}
