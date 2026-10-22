@@ -1,0 +1,15 @@
+{
+  "name": "socialconnect",
+  "private": true,
+  "workspaces": ["client", "server"],
+  "scripts": {
+    "dev": "concurrently -n server,client -c cyan,magenta \"npm run dev -w server\" \"npm run dev -w client\"",
+    "seed": "npm run seed -w server",
+    "test": "npm run test -w server",
+    "lint": "npm run lint -w client",
+    "build": "npm run build -w client"
+  },
+  "devDependencies": {
+    "concurrently": "^9.1.2"
+  }
+}
