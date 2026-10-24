@@ -6,7 +6,7 @@
     "dev": "node --watch src/index.js",
     "start": "node src/index.js",
     "seed": "node src/seed.js",
-    "test": "node --test src/tests/auth.test.js src/tests/social.test.js"
+    "test": "node --test src/tests/auth.test.js src/tests/social.test.js src/tests/chat_block.test.js"
   },
   "dependencies": {
     "bcryptjs": "^3.0.2",

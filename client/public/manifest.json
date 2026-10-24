@@ -1,0 +1,22 @@
+{
+  "short_name": "SocialConnect",
+  "name": "SocialConnect - Social Networking Web App",
+  "description": "An Instagram-style modern social networking web app",
+  "icons": [
+    {
+      "src": "https://picsum.photos/seed/scicon192/192/192",
+      "type": "image/png",
+      "sizes": "192x192"
+    },
+    {
+      "src": "https://picsum.photos/seed/scicon512/512/512",
+      "type": "image/png",
+      "sizes": "512x512"
+    }
+  ],
+  "start_url": "./",
+  "background_color": "#ffffff",
+  "theme_color": "#4f46e5",
+  "display": "standalone",
+  "orientation": "portrait"
+}

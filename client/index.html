@@ -3,10 +3,30 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>SocialConnect</title>
+    <title>SocialConnect - Modern Social Network</title>
+
+    <!-- SEO Meta Tags -->
+    <meta name="description" content="SocialConnect is a modern Instagram-style social networking web app. Share posts, 24h stories, nested comments, and chat in real-time." />
+    <meta name="theme-color" content="#4f46e5" />
+    <link rel="manifest" href="/manifest.json" />
+
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://anji0522.github.io/socialConnect/" />
+    <meta property="og:title" content="SocialConnect - Modern Social Network" />
+    <meta property="og:description" content="Share posts, stories, nested comments, and connect in real-time with SocialConnect." />
+    <meta property="og:image" content="https://picsum.photos/seed/sc-cover11/1200/630" />
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="SocialConnect - Modern Social Network" />
+    <meta name="twitter:description" content="An Instagram-style social networking web application." />
+    <meta name="twitter:image" content="https://picsum.photos/seed/sc-cover11/1200/630" />
+
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+
     <script>
       (function(l) {
         if (l.search[1] === '/') {
@@ -23,5 +43,14 @@
   <body>
     <div id="root"></div>
     <script type="module" src="/src/main.jsx"></script>
+    <script>
+      if ("serviceWorker" in navigator && window.location.protocol === "https:") {
+        window.addEventListener("load", function() {
+          navigator.serviceWorker.register("./sw.js").catch(function(err) {
+            console.log("ServiceWorker registration failed: ", err);
+          });
+        });
+      }
+    </script>
   </body>
 </html>
