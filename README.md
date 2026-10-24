@@ -1,75 +1,89 @@
 # SocialConnect 🌐
 
-> An Instagram-style modern social networking web application built with the MERN stack (MongoDB, Express.js, React, Node.js) and Tailwind CSS.
+> An Instagram-style modern social networking web application built with the MERN stack (MongoDB, Express.js, React 19, Node.js), Socket.io, and Tailwind CSS.
 
-[![Live Demo](https://img.shields.io/badge/Live_Demo-Online-emerald?style=for-the-badge&logo=vercel)](https://anji0522.github.io/socialConnect/)
-[![GitHub Repo](https://img.shields.io/badge/GitHub-Repository-blue?style=for-the-badge&logo=github)](https://github.com/Anji0522/socialConnect)
+[![CI Pipeline](https://github.com/Anji0522/socialConnect/actions/workflows/ci.yml/badge.svg)](https://github.com/Anji0522/socialConnect/actions/workflows/ci.yml)
+[![Deploy to GitHub Pages](https://github.com/Anji0522/socialConnect/actions/workflows/deploy.yml/badge.svg)](https://github.com/Anji0522/socialConnect/actions/workflows/deploy.yml)
+[![Live Frontend Demo](https://img.shields.io/badge/Live_Frontend-Online-emerald?style=for-the-badge&logo=vercel)](https://anji0522.github.io/socialConnect/)
+[![Backend API](https://img.shields.io/badge/Backend_API-Render_Ready-blue?style=for-the-badge&logo=render)](https://socialconnect-api.onrender.com)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg?style=for-the-badge)](https://opensource.org/licenses/MIT)
 
 ---
 
-## 🚀 Live Demo
+## 🚀 Live Demo & Deployed Links
 
-Experience the live app here:
-👉 **[https://anji0522.github.io/socialConnect/](https://anji0522.github.io/socialConnect/)**
+- **Frontend Web App (GitHub Pages)**: [https://anji0522.github.io/socialConnect/](https://anji0522.github.io/socialConnect/)
+- **Production Backend API (Render)**: [https://socialconnect-api.onrender.com](https://socialconnect-api.onrender.com)
+- **GitHub Repository**: [https://github.com/Anji0522/socialConnect](https://github.com/Anji0522/socialConnect)
 
-*(You can sign up for a new account with your profile name, gender, and date of birth, or log in with the pre-seeded demo user `demo@socialconnect.dev` / `Password123!`)*
+> **Demo Sandbox Account**:
+> - Email: `demo@socialconnect.dev`
+> - Password: `Password123!` *(Pre-seeded sandbox demo credentials for instant evaluation)*
+> - Or register a brand new account with your profile name, gender, and date of birth.
 
 ---
 
 ## 📸 Screenshots & UI Preview
 
-```
-+---------------------------------------------------------------------------------------------------+
-|  [Logo] SocialConnect                     [ Search #hashtags, @users ]              [Avatar] [Theme] |
-+-------------------------------+-----------------------------------------+-------------------------+
-|  LEFT SIDEBAR                 |  CENTER FEED                            |  RIGHT SIDEBAR          |
-|  - Feed                       |  +-----------------------------------+  |  - Follow Requests      |
-|  - Explore                    |  | Stories Bar (24h Disappearing)    |  |    [Accept] [Decline]   |
-|  - Messages                   |  +-----------------------------------+  |                         |
-|  - Notifications              |  | Post Composer (Media/Tags/Location)  |  - Suggestions for you  |
-|  - Saved                      |  +-----------------------------------+  |    [Follow]             |
-|  - Profile                    |  | Post Cards (Double-tap ❤️, nested  |  |                         |
-|  - Settings                   |  | comments, photo grid, saves)       |  |  - Activity / Trends    |
-|                               |  +-----------------------------------+  |                         |
-|  Contacts (Online Presence)   |  Infinite Scroll Feed                   |  (c) 2026 SocialConnect |
-+-------------------------------+-----------------------------------------+-------------------------+
-```
+| Home Feed & 3-Column Layout | Explore 3x3 Photo Grid |
+| :---: | :---: |
+| ![Home Feed](docs/screenshots/feed.png) | ![Explore Grid](docs/screenshots/explore.png) |
+
+| Real-Time Direct Messaging (Socket.io) | 24-Hour Stories Viewer |
+| :---: | :---: |
+| ![Direct Messages](docs/screenshots/chat.png) | ![Stories Viewer](docs/screenshots/stories.png) |
 
 ---
 
 ## ✨ Features
 
 - 📸 **Posts & Media Composer**
-  - Multi-image and video uploads with interactive carousel / grid layout.
-  - Client-side Canvas image compression before upload.
+  - Multi-image and video upload with removable thumbnail previews.
+  - Client-side HTML5 Canvas image compression before upload.
   - Location tagging (`MapPin`) and clickable `#hashtags` & `@mentions`.
   - Edit and delete own posts.
 - 📱 **Instagram-style Feed & Explore**
   - Following feed (newest first) and "Popular" feed ranking tabs.
   - Infinite scroll with cursor-based pagination.
-  - 3-column photo Explore grid with search by keyword, hashtag, or creator.
-- ❤️ **Engagement & Interactions**
+  - 3-column square photo Explore grid with search by keyword, hashtag, or creator.
+- ❤️ **Interactions, Comments & Saves**
   - Double-tap on media for Instagram-style heart pop animation.
   - Bookmark / save posts with a dedicated "Saved Posts" tab and page (`/saved`).
   - Nested comment threads (replies), comment likes, and inline comment editing.
   - 1-click post link sharing with copy-to-clipboard toast.
-- 👥 **User Profiles & Personal Details**
-  - User profile customization: profile name, username, bio, location, website URL, gender, and date of birth (`dob`).
-  - Follow / unfollow with real-time follower & following counts and lists.
-  - Private accounts toggle (only approved followers can see posts).
-  - Profile tabs: **Posts** (Card view vs. 3x3 Photo Grid) and **Saved**.
-- ⏱️ **Stories (24h Expiry)**
+- 💬 **Real-Time Direct Messaging (Socket.io)**
+  - One-to-one instant messaging.
+  - Online presence green indicator dots.
+  - Live typing indicator (`User is typing...`).
+  - Read receipts (`Seen` / checkmarks).
+  - Photo/image sharing in direct chat.
+- ⏱️ **Stories (24-Hour Disappearing)**
   - Ephemeral photo and video stories bar with unread gradient rings.
-  - Fullscreen story viewer with auto-advancing progress bar.
-- 💬 **Direct Messages & Contacts (Real-time)**
-  - Active contact list with online/offline presence indicators.
-- 🔔 **Notifications System**
-  - Activity feed for likes, comments, follows, and mentions with unread status badges.
-- 🌓 **Design & Theme**
-  - Modern 3-column layout built with Tailwind CSS.
-  - Light and Dark mode toggle with persistent theme preference.
+  - Auto-advancing fullscreen viewer with tap-to-navigate.
+  - Viewer list for the story owner.
+  - Quick emoji reaction bar (🔥, ❤️, 😂, 😮, 😢, 👏) and reply to DM.
+  - MongoDB TTL index for automatic 24-hour expiration.
+- 🛡️ **Safety & Moderation**
+  - Block and unblock users (blocked users are automatically hidden from feed, search, and messages).
+  - Mute and unmute users.
+  - Report posts and user profiles for moderation review.
+  - Private accounts with follow requests (accept/decline flow).
+- 🔍 **Search & Discovery**
+  - Debounced search for users and hashtags.
+  - Recent searches history saved locally.
+  - Trending hashtags section with post counts.
+- 🔒 **Security & Production Hardening**
+  - Helmet HTTP security headers.
+  - Rate limiting on authentication and API endpoints.
+  - Strict CORS whitelist.
+  - NoSQL injection sanitization and basic XSS hygiene.
+  - httpOnly, secure, SameSite JWT access and refresh token rotation.
+  - Token-based email verification and password reset flows (Nodemailer).
+- 🌓 **Theme & Progressive Web App (PWA)**
+  - Light and Dark mode with persistent theme preference.
   - Fully mobile-responsive layout with bottom navigation on small screens.
+  - Service worker caching shell and PWA web manifest.
+  - Global Error Boundary and floating Toast notification system.
 
 ---
 
@@ -77,12 +91,15 @@ Experience the live app here:
 
 | Layer | Technologies |
 | :--- | :--- |
-| **Frontend** | React 19, Vite, Tailwind CSS, Lucide React icons, React Router DOM |
+| **Frontend** | React 19, Vite, Tailwind CSS, Lucide React icons, React Router DOM v7 |
+| **Real-time** | Socket.io & Socket.io Client |
 | **Backend** | Node.js, Express.js (pure JavaScript MERN stack) |
-| **Database** | MongoDB with Mongoose ODM (or standalone in-memory / client storage) |
-| **Authentication** | JWT (JSON Web Tokens), bcryptjs password hashing, secure cookies |
-| **Validation** | Zod input schema validation on all API endpoints |
-| **Deployment** | GitHub Pages (CI/CD via GitHub Actions) & Vercel / Netlify / Render ready |
+| **Database** | MongoDB with Mongoose ODM (with compound & TTL indexes) |
+| **Authentication** | JWT (httpOnly cookies & Bearer tokens), bcryptjs password hashing |
+| **Security** | Helmet, express-rate-limit, custom NoSQL injection sanitization, CORS whitelist |
+| **Emails** | Nodemailer (with dev/test fallback logging) |
+| **Media Storage**| Cloudinary (with local disk fallback) |
+| **CI / CD** | GitHub Actions (`ci.yml` & `deploy.yml`) |
 
 ---
 
@@ -92,28 +109,36 @@ Experience the live app here:
 socialConnect/
 ├── .github/
 │   └── workflows/
-│       └── deploy.yml          # GitHub Pages CI/CD workflow
-├── client/                     # React + Vite Frontend
+│       ├── ci.yml              # Automated Lint, Test & Build CI pipeline
+│       └── deploy.yml          # GitHub Pages automated deployment
+├── client/                     # React 19 + Vite Frontend
 │   ├── public/
+│   │   ├── 404.html            # SPA redirect for GitHub Pages
+│   │   ├── manifest.json       # PWA web manifest
+│   │   └── sw.js               # Service Worker
 │   ├── src/
-│   │   ├── components/         # Reusable UI (PostCard, CommentThread, MediaGrid, etc.)
-│   │   ├── context/            # AuthContext, ThemeContext
+│   │   ├── components/         # Reusable UI (PostCard, CommentThread, MediaGrid, Stories, etc.)
+│   │   ├── context/            # AuthContext, SocketContext, ToastContext
 │   │   ├── layouts/            # AppLayout (3-column responsive layout)
 │   │   ├── lib/                # api.js, mockBackend.js, imageCompression.js
-│   │   └── pages/              # HomePage, ExplorePage, SavedPage, ProfilePage, etc.
+│   │   └── pages/              # HomePage, ExplorePage, MessagesPage, ProfilePage, SavedPage, etc.
 │   ├── package.json
 │   └── vite.config.js
 ├── server/                     # Node.js + Express Backend
 │   ├── src/
-│   │   ├── controllers/        # auth, post, engagement, user controllers
-│   │   ├── middleware/         # auth, validate, upload, error middleware
-│   │   ├── models/             # User, Post, Comment, Follow, Story, Notification
-│   │   ├── tests/              # Automated node:test suites (auth & social)
-│   │   └── app.js              # Express app entry
+│   │   ├── config/             # env.js, db.js
+│   │   ├── controllers/        # auth, user, post, engagement, message, story, upload
+│   │   ├── middleware/         # auth, validate, sanitize, csrf, errorHandler
+│   │   ├── models/             # User, Post, Comment, Like, Follow, Story, Message, Conversation, Report
+│   │   ├── tests/              # Automated node:test suites (auth, social, chat_block)
+│   │   ├── socket.js           # Socket.io real-time server
+│   │   └── app.js              # Express app
 │   └── package.json
+├── render.yaml                 # Render backend deployment blueprint
 ├── vercel.json                 # Vercel deployment configuration
-├── .env.example                # Backend environment template
-├── client/.env.example         # Frontend environment template
+├── .env.example                # Full environment template
+├── CONTRIBUTING.md             # Contribution guidelines
+├── LICENSE                     # MIT License
 ├── package.json                # Root workspace configuration
 └── README.md
 ```
@@ -121,11 +146,6 @@ socialConnect/
 ---
 
 ## ⚙️ Installation & Local Setup
-
-### Prerequisites
-- Node.js (v18 or v20+)
-- npm (v9+)
-- MongoDB (local instance or MongoDB Atlas URI)
 
 ### 1. Clone the repository
 ```bash
@@ -139,38 +159,29 @@ npm install
 ```
 
 ### 3. Environment configuration
-Create `server/.env` based on `.env.example`:
 ```bash
 cp .env.example server/.env
 ```
-Example `server/.env`:
-```env
-PORT=5000
-MONGODB_URI=mongodb://127.0.0.1:27017/socialconnect
-CLIENT_ORIGIN=http://localhost:5173
-JWT_SECRET=super-secret-jwt-key-replace-in-production
-JWT_EXPIRES_IN=7d
-```
+*(The default values in `.env.example` allow immediate local execution with local MongoDB or memory server)*
 
-### 4. Run the application
-Run both server and client concurrently from the project root:
+### 4. Run the development server
 ```bash
 npm run dev
 ```
 
 - **Frontend**: [http://localhost:5173](http://localhost:5173)
-- **Backend API**: [http://localhost:5000](http://localhost:5000)
+- **Backend API & Socket.io**: [http://localhost:5000](http://localhost:5000)
 
 ---
 
-## 🧪 Testing & Linting
+## 🧪 Testing & Quality Checks
 
-Run automated backend test suites (uses in-memory MongoDB):
+Run all automated test suites:
 ```bash
 npm test -w server
 ```
 
-Run ESLint verification:
+Run ESLint:
 ```bash
 npm run lint -w client
 ```
@@ -182,24 +193,13 @@ npm run build -w client
 
 ---
 
-## 🌐 Deployment Instructions
+## 🗺️ Roadmap
 
-### Option 1: GitHub Pages (Currently Active)
-This repository includes a GitHub Actions workflow in `.github/workflows/deploy.yml` that automatically builds and deploys the frontend to GitHub Pages on every push to `main`.
-1. Go to repository **Settings > Pages**.
-2. Under **Build and deployment > Source**, select **GitHub Actions**.
-3. Live URL: `https://anji0522.github.io/socialConnect/`
-
-### Option 2: Vercel (Frontend)
-1. Import this repository into [Vercel](https://vercel.com).
-2. Root directory: leave as `./` (the included `vercel.json` automatically configures the Vite build).
-3. (Optional) Set `VITE_API_URL` environment variable if connecting to an external Express backend.
-4. Click **Deploy**.
-
-### Option 3: Render / Railway (Backend)
-1. Deploy the `server` directory as a Web Service on [Render](https://render.com) or [Railway](https://railway.app).
-2. Set build command: `npm install` and start command: `npm start -w server`.
-3. Add environment variables: `MONGODB_URI`, `JWT_SECRET`, `CLIENT_ORIGIN`.
+- [x] **Phase 1: Fix & Harden**: SPA routing, Helmet, rate-limiting, NoSQL sanitization, httpOnly refresh tokens, password reset.
+- [x] **Phase 2: Missing Features**: Socket.io 1-to-1 chat, story viewer list & emoji reactions, user blocking/muting, debounced search, private account follow requests.
+- [x] **Phase 3: Production Backend**: Cloudinary upload pipeline, MongoDB compound/TTL indexes, Render deployment config (`render.yaml`).
+- [x] **Phase 4: Quality & UX**: Error boundaries, Toast provider, PWA manifest & service worker, chat & block automated test suites, GitHub Actions CI workflow.
+- [ ] **Phase 5 (Next)**: Group video calling (WebRTC) and audio voice messages in Direct Messages.
 
 ---
 
