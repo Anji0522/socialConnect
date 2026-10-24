@@ -13,6 +13,12 @@ export function LoginPage() {
   const [error, setError] = useState("");
   const [busy, setBusy] = useState(false);
 
+  // Forgot password modal state
+  const [showForgot, setShowForgot] = useState(false);
+  const [forgotEmail, setForgotEmail] = useState("");
+  const [forgotMsg, setForgotMsg] = useState("");
+  const [forgotBusy, setForgotBusy] = useState(false);
+
   if (user) return <Navigate to="/" replace />;
 
   async function submit(e) {
@@ -30,11 +36,28 @@ export function LoginPage() {
     }
   }
 
+  async function handleForgot(e) {
+    e.preventDefault();
+    setForgotBusy(true);
+    setForgotMsg("");
+    try {
+      const data = await api.post("/api/auth/forgot-password", { email: forgotEmail || email });
+      setForgotMsg(data.message || "Reset link sent!");
+    } catch (err) {
+      setForgotMsg(err.message);
+    } finally {
+      setForgotBusy(false);
+    }
+  }
+
   return (
     <div className="grid min-h-screen place-items-center bg-gradient-to-br from-blue-50 to-indigo-100 px-4 dark:from-slate-950 dark:to-indigo-950">
-      <form onSubmit={submit} className="card-surface w-full max-w-md p-8">
-        <h1 className="text-2xl font-bold text-primary">SocialConnect</h1>
+      <form onSubmit={submit} className="card-surface w-full max-w-md p-8 shadow-xl">
+        <h1 className="text-2xl font-bold bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent">
+          SocialConnect
+        </h1>
         <p className="mt-1 text-sm text-muted-foreground">Welcome back</p>
+
         <div className="mt-6 space-y-3">
           <Input type="email" value={email} onChange={(e) => setEmail(e.target.value)} placeholder="Email" required />
           <Input
@@ -45,14 +68,50 @@ export function LoginPage() {
             required
           />
         </div>
+
+        <div className="mt-2 flex justify-end">
+          <button
+            type="button"
+            onClick={() => setShowForgot(!showForgot)}
+            className="text-xs text-primary hover:underline"
+          >
+            Forgot password?
+          </button>
+        </div>
+
+        {showForgot && (
+          <div className="mt-3 rounded-lg border border-border bg-muted/40 p-3 text-xs space-y-2">
+            <p className="font-medium text-foreground">Reset Password</p>
+            <p className="text-muted-foreground">Enter your email and we&apos;ll send you instructions.</p>
+            <Input
+              type="email"
+              value={forgotEmail}
+              onChange={(e) => setForgotEmail(e.target.value)}
+              placeholder="Your email address"
+              className="h-8 text-xs"
+            />
+            <div className="flex gap-2">
+              <Button type="button" size="sm" onClick={handleForgot} disabled={forgotBusy}>
+                {forgotBusy ? "Sending…" : "Send Reset Link"}
+              </Button>
+              <Button type="button" variant="ghost" size="sm" onClick={() => setShowForgot(false)}>
+                Cancel
+              </Button>
+            </div>
+            {forgotMsg && <p className="text-xs text-primary">{forgotMsg}</p>}
+          </div>
+        )}
+
         {error && <p className="mt-3 text-sm text-destructive">{error}</p>}
+
         <Button className="mt-5 w-full" variant="gradient" disabled={busy}>
           {busy ? "Signing in…" : "Log in"}
         </Button>
+
         <Button
           type="button"
           variant="secondary"
-          className="mt-2 w-full"
+          className="mt-2 w-full text-xs"
           onClick={() => {
             setEmail("demo@socialconnect.dev");
             setPassword("Password123!");
@@ -60,9 +119,10 @@ export function LoginPage() {
         >
           Auto-fill Demo Account
         </Button>
+
         <p className="mt-4 text-center text-sm">
           New here?{" "}
-          <Link className="text-primary" to="/register">
+          <Link className="font-semibold text-primary hover:underline" to="/register">
             Create an account
           </Link>
         </p>

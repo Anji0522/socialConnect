@@ -1,4 +1,4 @@
-import { api } from "@/lib/api";
+import { api, clearStoredTokens } from "@/lib/api";
 import { createContext, useContext, useEffect, useState } from "react";
 
 const AuthContext = createContext(null);
@@ -23,8 +23,12 @@ export function AuthProvider({ children }) {
   }, []);
 
   async function logout() {
-    await api.post("/api/auth/logout");
-    setUser(null);
+    try {
+      await api.post("/api/auth/logout");
+    } finally {
+      clearStoredTokens();
+      setUser(null);
+    }
   }
 
   return <AuthContext.Provider value={{ user, loading, refresh, logout }}>{children}</AuthContext.Provider>;

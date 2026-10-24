@@ -275,7 +275,11 @@ export async function handleMockRequest(url, options = {}) {
     saveDb(db);
 
     localStorage.setItem(SESSION_KEY, newUser.id);
-    return { user: publicProfile(newUser, db, newUser.id) };
+    return {
+      user: publicProfile(newUser, db, newUser.id),
+      accessToken: `mock_access_${newUser.id}`,
+      refreshToken: `mock_refresh_${newUser.id}`,
+    };
   }
 
   if (path === "/api/auth/login" && method === "POST") {
@@ -291,7 +295,35 @@ export async function handleMockRequest(url, options = {}) {
     }
 
     localStorage.setItem(SESSION_KEY, user.id);
-    return { user: publicProfile(user, db, user.id) };
+    return {
+      user: publicProfile(user, db, user.id),
+      accessToken: `mock_access_${user.id}`,
+      refreshToken: `mock_refresh_${user.id}`,
+    };
+  }
+
+  if (path === "/api/auth/refresh" && method === "POST") {
+    const activeUser = db.users.find((u) => u.id === viewerId) || db.users[0];
+    return {
+      accessToken: `mock_access_${activeUser.id}`,
+      refreshToken: `mock_refresh_${activeUser.id}`,
+    };
+  }
+
+  if (path === "/api/auth/forgot-password" && method === "POST") {
+    return { message: "If an account with that email exists, reset instructions have been sent." };
+  }
+
+  if (path === "/api/auth/reset-password" && method === "POST") {
+    return { message: "Password has been reset successfully. Please log in." };
+  }
+
+  if (path.startsWith("/api/auth/verify-email") && method === "GET") {
+    return { message: "Email verified successfully!" };
+  }
+
+  if (path === "/api/auth/resend-verification" && method === "POST") {
+    return { message: "If your account is unverified, a new verification link has been sent." };
   }
 
   if (path === "/api/auth/logout" && method === "POST") {
