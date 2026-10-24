@@ -37,6 +37,7 @@ jobs:
         run: npm run build -w client
         env:
           VITE_BASE_PATH: /${{ github.event.repository.name }}/
+          VITE_API_URL: ${{ secrets.VITE_API_URL }}
 
       - name: Setup Pages
         uses: actions/configure-pages@v4

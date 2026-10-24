@@ -23,5 +23,6 @@ const postSchema = new mongoose.Schema(
 postSchema.index({ userId: 1, createdAt: -1 });
 postSchema.index({ createdAt: -1, _id: -1 });
 postSchema.index({ hashtags: 1 });
+postSchema.index({ content: "text", location: "text" });
 
 export const Post = mongoose.model("Post", postSchema);
