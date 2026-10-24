@@ -5,13 +5,15 @@ import { AppError, asyncHandler } from "../utils/errors.js";
 import { publicProfile } from "../utils/postMapper.js";
 
 export const register = asyncHandler(async (req, res) => {
-  const { username, email, password, name } = req.body;
+  const { username, email, password, name, gender, dob } = req.body;
   const passwordHash = await bcrypt.hash(password, 12);
   const user = await User.create({
     username: username.toLowerCase(),
     email: email.toLowerCase(),
     passwordHash,
     name,
+    gender: gender || "",
+    dob: dob || "",
   });
   setAuthCookie(res, signToken(user.id));
   res.status(201).json({ user: await publicProfile(user, user.id) });

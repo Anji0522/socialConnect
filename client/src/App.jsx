@@ -7,6 +7,7 @@ import { NotificationsPage } from "@/pages/NotificationsPage";
 import { PlaceholderPage } from "@/pages/PlaceholderPage";
 import { ProfilePage } from "@/pages/ProfilePage";
 import { RegisterPage } from "@/pages/RegisterPage";
+import { SavedPage } from "@/pages/SavedPage";
 import { SettingsPage } from "@/pages/SettingsPage";
 import { ProtectedRoute } from "@/routes/ProtectedRoute";
 import { Navigate, Route, Routes } from "react-router-dom";
@@ -25,10 +26,7 @@ export default function App() {
             element={<PlaceholderPage title="Messages" body="Realtime chat lands in Phase 3." />}
           />
           <Route path="/notifications" element={<NotificationsPage />} />
-          <Route
-            path="/saved"
-            element={<PlaceholderPage title="Saved" body="Bookmarks land in Phase 2." />}
-          />
+          <Route path="/saved" element={<SavedPage />} />
           <Route path="/settings" element={<SettingsPage />} />
           <Route path="/profile/:username" element={<ProfilePage />} />
           <Route path="/profile/:username/followers" element={<FollowListPage mode="followers" />} />

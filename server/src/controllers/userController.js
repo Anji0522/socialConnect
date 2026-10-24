@@ -13,7 +13,7 @@ export const getUser = asyncHandler(async (req, res) => {
 
 export const updateUser = asyncHandler(async (req, res) => {
   if (req.params.id !== req.user.id) throw new AppError(403, "You can only edit your own profile");
-  const allowed = ["name", "bio", "location", "avatarUrl", "coverUrl"];
+  const allowed = ["name", "bio", "location", "website", "gender", "dob", "isPrivate", "avatarUrl", "coverUrl"];
   for (const key of allowed) {
     if (req.body[key] !== undefined) req.user[key] = req.body[key];
   }

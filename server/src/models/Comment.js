@@ -4,10 +4,11 @@ const commentSchema = new mongoose.Schema(
   {
     userId: { type: mongoose.Schema.Types.ObjectId, ref: "User", required: true },
     postId: { type: mongoose.Schema.Types.ObjectId, ref: "Post", required: true, index: true },
-    parentId: { type: mongoose.Schema.Types.ObjectId, ref: "Comment", default: null },
+    parentId: { type: mongoose.Schema.Types.ObjectId, ref: "Comment", default: null, index: true },
     content: { type: String, required: true, maxlength: 500 },
+    likes: [{ type: mongoose.Schema.Types.ObjectId, ref: "User" }],
   },
-  { timestamps: { createdAt: true, updatedAt: false } },
+  { timestamps: true },
 );
 
 commentSchema.index({ postId: 1, createdAt: 1 });

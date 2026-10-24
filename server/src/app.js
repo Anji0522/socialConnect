@@ -19,6 +19,7 @@ import * as upload from "./controllers/uploadController.js";
 import * as stories from "./controllers/storyController.js";
 import * as misc from "./controllers/miscController.js";
 import {
+  commentIdParamSchema,
   commentListSchema,
   commentSchema,
   createPostSchema,
@@ -26,6 +27,7 @@ import {
   idParamSchema,
   loginSchema,
   registerSchema,
+  updateCommentSchema,
   updatePostSchema,
   updateUserSchema,
 } from "./validators/schemas.js";
@@ -85,15 +87,22 @@ export function createApp() {
 
   app.post("/api/posts", requireAuth, validate(createPostSchema), posts.createPost);
   app.get("/api/feed", requireAuth, validate(feedQuerySchema), posts.getFeed);
+  app.get("/api/explore", optionalAuth, posts.getExploreFeed);
+  app.get("/api/posts/saved", requireAuth, posts.getSavedPosts);
   app.get("/api/posts/:id", optionalAuth, validate(idParamSchema), posts.getPost);
   app.put("/api/posts/:id", requireAuth, validate(updatePostSchema), posts.updatePost);
   app.delete("/api/posts/:id", requireAuth, validate(idParamSchema), posts.deletePost);
 
   app.post("/api/posts/:id/like", requireAuth, validate(idParamSchema), engage.likePost);
   app.delete("/api/posts/:id/like", requireAuth, validate(idParamSchema), engage.unlikePost);
+  app.post("/api/posts/:id/bookmark", requireAuth, validate(idParamSchema), engage.bookmarkPost);
+  app.delete("/api/posts/:id/bookmark", requireAuth, validate(idParamSchema), engage.unbookmarkPost);
   app.get("/api/posts/:id/comments", optionalAuth, validate(commentListSchema), engage.listComments);
   app.post("/api/posts/:id/comments", requireAuth, validate(commentSchema), engage.addComment);
+  app.put("/api/comments/:commentId", requireAuth, validate(updateCommentSchema), engage.updateComment);
   app.delete("/api/comments/:commentId", requireAuth, engage.deleteComment);
+  app.post("/api/comments/:commentId/like", requireAuth, validate(commentIdParamSchema), engage.likeComment);
+  app.delete("/api/comments/:commentId/like", requireAuth, validate(commentIdParamSchema), engage.unlikeComment);
 
   app.get("/api/stories", requireAuth, stories.listStories);
   app.get("/api/notifications", requireAuth, misc.listNotifications);

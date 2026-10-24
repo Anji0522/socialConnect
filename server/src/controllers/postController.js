@@ -1,5 +1,5 @@
 import mongoose from "mongoose";
-import { Comment, Hashtag, Like, Post } from "../models/index.js";
+import { Bookmark, Comment, Hashtag, Like, Post } from "../models/index.js";
 import { AppError, asyncHandler } from "../utils/errors.js";
 import { bumpHashtags, extractHashtags } from "../utils/hashtags.js";
 import {
@@ -11,6 +11,7 @@ import {
 
 export const createPost = asyncHandler(async (req, res) => {
   const content = req.body.content || "";
+  const location = req.body.location || "";
   const media = req.body.media || [];
   if (!content.trim() && media.length === 0) {
     throw new AppError(400, "Post needs text or at least one image");
@@ -20,6 +21,7 @@ export const createPost = asyncHandler(async (req, res) => {
   const post = await Post.create({
     userId: req.user._id,
     content,
+    location,
     hashtags,
     media,
   });
@@ -44,6 +46,9 @@ export const updatePost = asyncHandler(async (req, res) => {
     post.content = req.body.content;
     post.hashtags = extractHashtags(req.body.content);
   }
+  if (req.body.location !== undefined) {
+    post.location = req.body.location;
+  }
   if (req.body.media !== undefined) {
     if (req.body.media.length > 10) throw new AppError(400, "Maximum 10 images");
     post.media = req.body.media;
@@ -58,12 +63,33 @@ export const deletePost = asyncHandler(async (req, res) => {
   const post = await Post.findById(req.params.id);
   if (!post) throw new AppError(404, "Post not found");
   if (post.userId.toString() !== req.user.id) throw new AppError(403, "Not allowed to delete this post");
-  await Promise.all([Like.deleteMany({ postId: post._id }), Comment.deleteMany({ postId: post._id }), post.deleteOne()]);
+  await Promise.all([
+    Like.deleteMany({ postId: post._id }),
+    Comment.deleteMany({ postId: post._id }),
+    Bookmark.deleteMany({ postId: post._id }),
+    post.deleteOne(),
+  ]);
   res.json({ ok: true });
 });
 
 export const getUserPosts = asyncHandler(async (req, res) => {
   const posts = await Post.find({ userId: req.params.id }).sort({ createdAt: -1, _id: -1 }).limit(30).populate("userId");
+  res.json({ posts: await serializePosts(posts, req.user?.id) });
+});
+
+export const getSavedPosts = asyncHandler(async (req, res) => {
+  const bookmarks = await Bookmark.find({ userId: req.user._id }).sort({ createdAt: -1 });
+  const postIds = bookmarks.map((b) => b.postId);
+  const posts = await Post.find({ _id: { $in: postIds } }).populate("userId");
+  res.json({ posts: await serializePosts(posts, req.user.id) });
+});
+
+export const getExploreFeed = asyncHandler(async (req, res) => {
+  const limit = Number(req.query.limit) || 24;
+  const posts = await Post.find({})
+    .sort({ createdAt: -1 })
+    .limit(limit)
+    .populate("userId");
   res.json({ posts: await serializePosts(posts, req.user?.id) });
 });
 

@@ -1,37 +1,37 @@
-const STORAGE_KEY = "socialconnect_mock_db_v2";
-const SESSION_KEY = "socialconnect_mock_session_v2";
+const STORAGE_KEY = "socialconnect_mock_db_v3";
+const SESSION_KEY = "socialconnect_mock_session_v3";
 
 const defaultPeople = [
-  { id: "usr_demo", username: "demo", email: "demo@socialconnect.dev", name: "Demo User", bio: "Log in as me to explore the feed.", location: "Everywhere", avatarUrl: "https://i.pravatar.cc/150?img=60", coverUrl: "https://picsum.photos/seed/sc-cover11/1200/360" },
-  { id: "usr_maya", username: "maya", email: "maya@socialconnect.dev", name: "Maya Chen", bio: "Photographer & weekend hiker.", location: "San Francisco", avatarUrl: "https://i.pravatar.cc/150?img=5", coverUrl: "https://picsum.photos/seed/sc-cover0/1200/360" },
-  { id: "usr_jordan", username: "jordan", email: "jordan@socialconnect.dev", name: "Jordan Blake", bio: "Building products people love.", location: "Austin", avatarUrl: "https://i.pravatar.cc/150?img=6", coverUrl: "https://picsum.photos/seed/sc-cover1/1200/360" },
-  { id: "usr_priya", username: "priya", email: "priya@socialconnect.dev", name: "Priya Nair", bio: "Coffee, code, and city walks.", location: "Bengaluru", avatarUrl: "https://i.pravatar.cc/150?img=7", coverUrl: "https://picsum.photos/seed/sc-cover2/1200/360" },
-  { id: "usr_leo", username: "leo", email: "leo@socialconnect.dev", name: "Leo Martins", bio: "Street food hunter.", location: "Lisbon", avatarUrl: "https://i.pravatar.cc/150?img=8", coverUrl: "https://picsum.photos/seed/sc-cover3/1200/360" },
-  { id: "usr_nina", username: "nina", email: "nina@socialconnect.dev", name: "Nina Rossi", bio: "Design systems nerd.", location: "Milan", avatarUrl: "https://i.pravatar.cc/150?img=9", coverUrl: "https://picsum.photos/seed/sc-cover4/1200/360" },
-  { id: "usr_samir", username: "samir", email: "samir@socialconnect.dev", name: "Samir Haddad", bio: "Music producer.", location: "Beirut", avatarUrl: "https://i.pravatar.cc/150?img=10", coverUrl: "https://picsum.photos/seed/sc-cover5/1200/360" },
-  { id: "usr_aisha", username: "aisha", email: "aisha@socialconnect.dev", name: "Aisha Okonkwo", bio: "Climate journalist.", location: "Lagos", avatarUrl: "https://i.pravatar.cc/150?img=11", coverUrl: "https://picsum.photos/seed/sc-cover6/1200/360" },
-  { id: "usr_ethan", username: "ethan", email: "ethan@socialconnect.dev", name: "Ethan Park", bio: "Trail runner.", location: "Seoul", avatarUrl: "https://i.pravatar.cc/150?img=12", coverUrl: "https://picsum.photos/seed/sc-cover7/1200/360" },
-  { id: "usr_sofia", username: "sofia", email: "sofia@socialconnect.dev", name: "Sofia Alvarez", bio: "Film stills & golden hour.", location: "Mexico City", avatarUrl: "https://i.pravatar.cc/150?img=13", coverUrl: "https://picsum.photos/seed/sc-cover8/1200/360" },
-  { id: "usr_owen", username: "owen", email: "owen@socialconnect.dev", name: "Owen Wright", bio: "Open source maintainer.", location: "Toronto", avatarUrl: "https://i.pravatar.cc/150?img=14", coverUrl: "https://picsum.photos/seed/sc-cover9/1200/360" },
-  { id: "usr_hana", username: "hana", email: "hana@socialconnect.dev", name: "Hana Suzuki", bio: "Ceramic studio days.", location: "Kyoto", avatarUrl: "https://i.pravatar.cc/150?img=15", coverUrl: "https://picsum.photos/seed/sc-cover10/1200/360" },
+  { id: "usr_demo", username: "demo", email: "demo@socialconnect.dev", name: "Demo User", bio: "Log in as me to explore the feed.", location: "Everywhere", website: "https://socialconnect.dev", gender: "prefer_not_to_say", dob: "1998-05-12", isPrivate: false, avatarUrl: "https://i.pravatar.cc/150?img=60", coverUrl: "https://picsum.photos/seed/sc-cover11/1200/360" },
+  { id: "usr_maya", username: "maya", email: "maya@socialconnect.dev", name: "Maya Chen", bio: "Photographer & weekend hiker.", location: "San Francisco", website: "https://mayachen.photo", gender: "female", dob: "1996-08-20", isPrivate: false, avatarUrl: "https://i.pravatar.cc/150?img=5", coverUrl: "https://picsum.photos/seed/sc-cover0/1200/360" },
+  { id: "usr_jordan", username: "jordan", email: "jordan@socialconnect.dev", name: "Jordan Blake", bio: "Building products people love.", location: "Austin", website: "https://jordanblake.dev", gender: "male", dob: "1994-03-15", isPrivate: false, avatarUrl: "https://i.pravatar.cc/150?img=6", coverUrl: "https://picsum.photos/seed/sc-cover1/1200/360" },
+  { id: "usr_priya", username: "priya", email: "priya@socialconnect.dev", name: "Priya Nair", bio: "Coffee, code, and city walks.", location: "Bengaluru", website: "https://priyanair.me", gender: "female", dob: "1997-11-04", isPrivate: false, avatarUrl: "https://i.pravatar.cc/150?img=7", coverUrl: "https://picsum.photos/seed/sc-cover2/1200/360" },
+  { id: "usr_leo", username: "leo", email: "leo@socialconnect.dev", name: "Leo Martins", bio: "Street food hunter.", location: "Lisbon", website: "", gender: "male", dob: "1993-01-22", isPrivate: false, avatarUrl: "https://i.pravatar.cc/150?img=8", coverUrl: "https://picsum.photos/seed/sc-cover3/1200/360" },
+  { id: "usr_nina", username: "nina", email: "nina@socialconnect.dev", name: "Nina Rossi", bio: "Design systems nerd.", location: "Milan", website: "https://ninarossi.design", gender: "female", dob: "1999-07-19", isPrivate: false, avatarUrl: "https://i.pravatar.cc/150?img=9", coverUrl: "https://picsum.photos/seed/sc-cover4/1200/360" },
+  { id: "usr_samir", username: "samir", email: "samir@socialconnect.dev", name: "Samir Haddad", bio: "Music producer.", location: "Beirut", website: "", gender: "male", dob: "1992-12-10", isPrivate: false, avatarUrl: "https://i.pravatar.cc/150?img=10", coverUrl: "https://picsum.photos/seed/sc-cover5/1200/360" },
+  { id: "usr_aisha", username: "aisha", email: "aisha@socialconnect.dev", name: "Aisha Okonkwo", bio: "Climate journalist.", location: "Lagos", website: "", gender: "female", dob: "1995-09-30", isPrivate: false, avatarUrl: "https://i.pravatar.cc/150?img=11", coverUrl: "https://picsum.photos/seed/sc-cover6/1200/360" },
+  { id: "usr_ethan", username: "ethan", email: "ethan@socialconnect.dev", name: "Ethan Park", bio: "Trail runner.", location: "Seoul", website: "", gender: "male", dob: "1996-04-18", isPrivate: false, avatarUrl: "https://i.pravatar.cc/150?img=12", coverUrl: "https://picsum.photos/seed/sc-cover7/1200/360" },
+  { id: "usr_sofia", username: "sofia", email: "sofia@socialconnect.dev", name: "Sofia Alvarez", bio: "Film stills & golden hour.", location: "Mexico City", website: "", gender: "female", dob: "1998-02-14", isPrivate: false, avatarUrl: "https://i.pravatar.cc/150?img=13", coverUrl: "https://picsum.photos/seed/sc-cover8/1200/360" },
+  { id: "usr_owen", username: "owen", email: "owen@socialconnect.dev", name: "Owen Wright", bio: "Open source maintainer.", location: "Toronto", website: "https://github.com/owen", gender: "male", dob: "1991-06-08", isPrivate: false, avatarUrl: "https://i.pravatar.cc/150?img=14", coverUrl: "https://picsum.photos/seed/sc-cover9/1200/360" },
+  { id: "usr_hana", username: "hana", email: "hana@socialconnect.dev", name: "Hana Suzuki", bio: "Ceramic studio days.", location: "Kyoto", website: "", gender: "female", dob: "1997-10-25", isPrivate: false, avatarUrl: "https://i.pravatar.cc/150?img=15", coverUrl: "https://picsum.photos/seed/sc-cover10/1200/360" },
 ];
 
 const postCopies = [
-  ["Golden hour on the waterfront. #travel #photo", 2],
-  ["Shipped a tiny feature that made support tickets drop. #buildinpublic", 1],
-  ["New café find: oat cortado and a window seat. #coffee", 3],
-  ["Sunday market haul. Tomatoes that actually smell like tomatoes. #food", 2],
-  ["Sketching a calmer dashboard. Less chrome, more breathing room. #design", 1],
-  ["Late-night mix in progress. Drums first, always. #music", 1],
-  ["A coastline that still surprises me. #nature #travel", 4],
-  ["10k before breakfast. Legs heavy, head clear. #running", 1],
-  ["Color study from last night's shoot. #photo", 5],
-  ["If your API docs need a novel, the API is too clever. #dev", 0],
-  ["The kiln opened. One cracked, eleven sang. #studio", 2],
-  ["Welcome to SocialConnect — follow people and the feed comes alive. #socialconnect", 1],
-  ["Rain on the studio window. Perfect excuse to stay in and edit. #photo", 2],
-  ["A thread of small kindnesses I noticed today.", 0],
-  ["Trying nested layouts until the sidebar feels inevitable. #design", 1],
+  ["Golden hour on the waterfront. #travel #photo", 2, "San Francisco Bay"],
+  ["Shipped a tiny feature that made support tickets drop. #buildinpublic", 1, "Austin, TX"],
+  ["New café find: oat cortado and a window seat. #coffee", 3, "Bengaluru, India"],
+  ["Sunday market haul. Tomatoes that actually smell like tomatoes. #food", 2, "Lisbon Market"],
+  ["Sketching a calmer dashboard. Less chrome, more breathing room. #design", 1, "Milan, Italy"],
+  ["Late-night mix in progress. Drums first, always. #music", 1, "Beirut Studio"],
+  ["A coastline that still surprises me. #nature #travel", 4, "Lagos Coast"],
+  ["10k before breakfast. Legs heavy, head clear. #running", 1, "Namsan Park, Seoul"],
+  ["Color study from last night's shoot. #photo", 5, "Roma Norte, Mexico City"],
+  ["If your API docs need a novel, the API is too clever. #dev", 0, "Toronto, ON"],
+  ["The kiln opened. One cracked, eleven sang. #studio", 2, "Kyoto Ceramics"],
+  ["Welcome to SocialConnect — follow people and the feed comes alive. #socialconnect", 1, "Global"],
+  ["Rain on the studio window. Perfect excuse to stay in and edit. #photo", 2, "Studio 4B"],
+  ["A thread of small kindnesses I noticed today. #community", 0, "Downtown"],
+  ["Trying nested layouts until the sidebar feels inevitable. #design", 1, "Design Lab"],
 ];
 
 function generateSeedState() {
@@ -54,16 +54,18 @@ function generateSeedState() {
 
   const posts = [];
   for (let i = 0; i < postCopies.length; i++) {
-    const [content, n] = postCopies[i];
+    const [content, n, loc] = postCopies[i];
     const author = users[i % users.length];
     const media = Array.from({ length: n }, (_, p) => ({
       url: `https://picsum.photos/seed/sc${i}-${p}/900/700`,
+      type: "image",
       position: p,
     }));
     posts.push({
       id: `post_${i + 1}`,
       userId: author.id,
       content,
+      location: loc || "",
       media,
       createdAt: new Date(Date.now() - (i + 1) * 3600000 * 3).toISOString(),
     });
@@ -71,16 +73,34 @@ function generateSeedState() {
 
   const likes = [];
   const comments = [];
+  const bookmarks = [
+    { userId: demo.id, postId: posts[0].id },
+    { userId: demo.id, postId: posts[2].id },
+  ];
+
   for (const post of posts) {
     for (const u of users.slice(0, 3)) {
       if (u.id !== post.userId) likes.push({ userId: u.id, postId: post.id });
     }
+    const rootCommentId = `c_${post.id}_1`;
     comments.push({
-      id: `c_${post.id}_1`,
+      id: rootCommentId,
       postId: post.id,
       userId: users[1].id,
       content: "This is lovely — saving it.",
+      parentId: null,
+      likes: [users[0].id],
       createdAt: new Date(Date.now() - 3600000).toISOString(),
+    });
+    // add a nested reply to demo comments
+    comments.push({
+      id: `c_${post.id}_reply_1`,
+      postId: post.id,
+      userId: post.userId,
+      content: "Thank you so much! Glad you liked it.",
+      parentId: rootCommentId,
+      likes: [],
+      createdAt: new Date(Date.now() - 1800000).toISOString(),
     });
   }
 
@@ -102,7 +122,7 @@ function generateSeedState() {
     { id: "nt_2", userId: demo.id, type: "LIKE", actorId: users[2].id, postId: posts[0].id, createdAt: new Date(Date.now() - 3600000).toISOString(), read: false },
   ];
 
-  return { users, posts, follows, likes, comments, stories, friendRequests, notifications };
+  return { users, posts, follows, likes, comments, bookmarks, stories, friendRequests, notifications };
 }
 
 function getDb() {
@@ -148,6 +168,10 @@ function publicProfile(user, db, viewerId) {
     name: user.name,
     bio: user.bio || "",
     location: user.location || "",
+    website: user.website || "",
+    gender: user.gender || "",
+    dob: user.dob || "",
+    isPrivate: Boolean(user.isPrivate),
     avatarUrl: user.avatarUrl || `https://ui-avatars.com/api/?name=${encodeURIComponent(user.name)}`,
     coverUrl: user.coverUrl || "",
     createdAt: user.createdAt,
@@ -162,17 +186,25 @@ function serializePost(post, db, viewerId) {
   const likeCount = db.likes.filter((l) => l.postId === post.id).length;
   const commentCount = db.comments.filter((c) => c.postId === post.id).length;
   const likedByMe = viewerId ? db.likes.some((l) => l.postId === post.id && l.userId === viewerId) : false;
-  const followingAuthor = viewerId && author ? db.follows.some((f) => f.followerId === viewerId && f.followingId === author.id) : false;
+  const bookmarkedByMe = viewerId
+    ? (db.bookmarks || []).some((b) => b.postId === post.id && b.userId === viewerId)
+    : false;
+  const followingAuthor =
+    viewerId && author
+      ? db.follows.some((f) => f.followerId === viewerId && f.followingId === author.id)
+      : false;
 
   return {
     id: post.id,
     content: post.content || "",
+    location: post.location || "",
     media: (post.media || []).sort((a, b) => a.position - b.position),
     createdAt: post.createdAt,
     author: publicProfile(author, db, viewerId),
     likeCount,
     commentCount,
     likedByMe,
+    bookmarkedByMe,
     followingAuthor,
   };
 }
@@ -180,6 +212,7 @@ function serializePost(post, db, viewerId) {
 export async function handleMockRequest(url, options = {}) {
   const method = (options.method || "GET").toUpperCase();
   const db = getDb();
+  if (!db.bookmarks) db.bookmarks = [];
   let viewerId = getViewerId();
 
   // Extract path and query
@@ -205,7 +238,7 @@ export async function handleMockRequest(url, options = {}) {
 
   // --- 1. AUTH ---
   if (path === "/api/auth/register" && method === "POST") {
-    const { username, email, password, name } = body;
+    const { username, email, password, name, gender, dob } = body;
     if (!username || !email || !password || !name) {
       throw new Error("All fields are required");
     }
@@ -225,6 +258,10 @@ export async function handleMockRequest(url, options = {}) {
       email: cleanEmail,
       name: name.trim(),
       password,
+      gender: gender || "",
+      dob: dob || "",
+      website: "",
+      isPrivate: false,
       avatarUrl: `https://ui-avatars.com/api/?name=${encodeURIComponent(name.trim())}&background=4f46e5&color=fff`,
       coverUrl: "https://picsum.photos/seed/newcover/1200/360",
       bio: "Joined SocialConnect!",
@@ -274,7 +311,6 @@ export async function handleMockRequest(url, options = {}) {
 
   // Require auth for protected paths
   if (!viewerId && !path.startsWith("/api/auth")) {
-    // If not authenticated, return demo user if requesting me, or throw
     throw new Error("Authentication required");
   }
 
@@ -282,7 +318,7 @@ export async function handleMockRequest(url, options = {}) {
   if (path === "/api/users/suggestions" && method === "GET") {
     const myFollows = new Set(db.follows.filter((f) => f.followerId === viewerId).map((f) => f.followingId));
     myFollows.add(viewerId);
-    const suggestions = db.users.filter((u) => !myFollows.has(u.id)).slice(0, 8);
+    const suggestions = db.users.filter((u) => !myFollows.has(u.id)).slice(0, 10);
     return { users: suggestions.map((u) => publicProfile(u, db, viewerId)) };
   }
 
@@ -297,7 +333,7 @@ export async function handleMockRequest(url, options = {}) {
   if (userMatch && method === "PUT") {
     const target = db.users.find((u) => u.id === viewerId);
     if (!target) throw new Error("User not found");
-    const allowed = ["name", "bio", "location", "avatarUrl", "coverUrl"];
+    const allowed = ["name", "bio", "location", "avatarUrl", "coverUrl", "website", "gender", "dob", "isPrivate"];
     for (const key of allowed) {
       if (body[key] !== undefined) target[key] = body[key];
     }
@@ -385,18 +421,49 @@ export async function handleMockRequest(url, options = {}) {
     };
   }
 
+  if (path === "/api/explore" && method === "GET") {
+    const allPosts = [...db.posts].sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+    return { posts: allPosts.map((p) => serializePost(p, db, viewerId)) };
+  }
+
+  if (path === "/api/posts/saved" && method === "GET") {
+    const savedIds = new Set((db.bookmarks || []).filter((b) => b.userId === viewerId).map((b) => b.postId));
+    const savedPosts = db.posts
+      .filter((p) => savedIds.has(p.id))
+      .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+    return { posts: savedPosts.map((p) => serializePost(p, db, viewerId)) };
+  }
+
   if (path === "/api/posts" && method === "POST") {
-    const { content, media } = body;
+    const { content, media, location } = body;
     const newPost = {
       id: `post_${Date.now()}`,
       userId: viewerId,
       content: content || "",
+      location: location || "",
       media: media || [],
       createdAt: new Date().toISOString(),
     };
     db.posts.unshift(newPost);
     saveDb(db);
     return { post: serializePost(newPost, db, viewerId) };
+  }
+
+  const postBookmarkMatch = path.match(/^\/api\/posts\/([^/]+)\/bookmark$/);
+  if (postBookmarkMatch) {
+    const postId = postBookmarkMatch[1];
+    if (method === "POST") {
+      if (!db.bookmarks.some((b) => b.postId === postId && b.userId === viewerId)) {
+        db.bookmarks.push({ postId, userId: viewerId });
+        saveDb(db);
+      }
+      return { bookmarked: true };
+    }
+    if (method === "DELETE") {
+      db.bookmarks = db.bookmarks.filter((b) => !(b.postId === postId && b.userId === viewerId));
+      saveDb(db);
+      return { bookmarked: false };
+    }
   }
 
   const postItemMatch = path.match(/^\/api\/posts\/([^/]+)$/);
@@ -412,6 +479,7 @@ export async function handleMockRequest(url, options = {}) {
       if (!p) throw new Error("Post not found");
       if (p.userId !== viewerId) throw new Error("Forbidden");
       if (body.content !== undefined) p.content = body.content;
+      if (body.location !== undefined) p.location = body.location;
       if (body.media !== undefined) p.media = body.media;
       saveDb(db);
       return { post: serializePost(p, db, viewerId) };
@@ -420,6 +488,7 @@ export async function handleMockRequest(url, options = {}) {
       db.posts = db.posts.filter((x) => x.id !== postId);
       db.likes = db.likes.filter((l) => l.postId !== postId);
       db.comments = db.comments.filter((c) => c.postId !== postId);
+      db.bookmarks = db.bookmarks.filter((b) => b.postId !== postId);
       saveDb(db);
       return { ok: true };
     }
@@ -457,17 +526,85 @@ export async function handleMockRequest(url, options = {}) {
     }
   }
 
+  // Comment Likes
+  const commentLikeMatch = path.match(/^\/api\/comments\/([^/]+)\/like$/);
+  if (commentLikeMatch) {
+    const commentId = commentLikeMatch[1];
+    const comment = db.comments.find((c) => c.id === commentId);
+    if (!comment) throw new Error("Comment not found");
+    if (!comment.likes) comment.likes = [];
+
+    if (method === "POST") {
+      if (!comment.likes.includes(viewerId)) {
+        comment.likes.push(viewerId);
+        saveDb(db);
+      }
+      return { liked: true, likesCount: comment.likes.length };
+    }
+    if (method === "DELETE") {
+      comment.likes = comment.likes.filter((id) => id !== viewerId);
+      saveDb(db);
+      return { liked: false, likesCount: comment.likes.length };
+    }
+  }
+
+  const editCommentMatch = path.match(/^\/api\/comments\/([^/]+)$/);
+  if (editCommentMatch) {
+    const commentId = editCommentMatch[1];
+    const comment = db.comments.find((c) => c.id === commentId);
+    if (!comment) throw new Error("Comment not found");
+
+    if (method === "PUT") {
+      if (comment.userId !== viewerId) throw new Error("Forbidden");
+      comment.content = body.content || comment.content;
+      comment.updatedAt = new Date().toISOString();
+      saveDb(db);
+      return {
+        comment: {
+          ...comment,
+          author: publicProfile(db.users.find((u) => u.id === comment.userId), db, viewerId),
+          likesCount: (comment.likes || []).length,
+          likedByMe: (comment.likes || []).includes(viewerId),
+        },
+      };
+    }
+    if (method === "DELETE") {
+      if (comment.userId !== viewerId) throw new Error("Forbidden");
+      // Remove comment and its direct replies
+      db.comments = db.comments.filter((c) => c.id !== commentId && c.parentId !== commentId);
+      saveDb(db);
+      return { ok: true };
+    }
+  }
+
   const commentsMatch = path.match(/^\/api\/posts\/([^/]+)\/comments$/);
   if (commentsMatch) {
     const postId = commentsMatch[1];
     if (method === "GET") {
       const postComments = db.comments.filter((c) => c.postId === postId);
-      return {
-        comments: postComments.map((c) => ({
-          ...c,
-          author: publicProfile(db.users.find((u) => u.id === c.userId), db, viewerId),
-        })),
-      };
+      const rootComments = postComments.filter((c) => !c.parentId);
+
+      const formatted = rootComments.map((root) => {
+        const replies = postComments
+          .filter((c) => c.parentId === root.id)
+          .sort((a, b) => new Date(a.createdAt) - new Date(b.createdAt))
+          .map((r) => ({
+            ...r,
+            author: publicProfile(db.users.find((u) => u.id === r.userId), db, viewerId),
+            likesCount: (r.likes || []).length,
+            likedByMe: viewerId ? (r.likes || []).includes(viewerId) : false,
+          }));
+
+        return {
+          ...root,
+          author: publicProfile(db.users.find((u) => u.id === root.userId), db, viewerId),
+          likesCount: (root.likes || []).length,
+          likedByMe: viewerId ? (root.likes || []).includes(viewerId) : false,
+          replies,
+        };
+      });
+
+      return { comments: formatted };
     }
     if (method === "POST") {
       const newComment = {
@@ -475,9 +612,12 @@ export async function handleMockRequest(url, options = {}) {
         postId,
         userId: viewerId,
         content: body.content,
+        parentId: body.parentId || null,
+        likes: [],
         createdAt: new Date().toISOString(),
       };
       db.comments.push(newComment);
+
       const post = db.posts.find((p) => p.id === postId);
       if (post && post.userId !== viewerId) {
         db.notifications.push({
@@ -491,32 +631,27 @@ export async function handleMockRequest(url, options = {}) {
         });
       }
       saveDb(db);
+
       return {
         comment: {
           ...newComment,
           author: publicProfile(db.users.find((u) => u.id === viewerId), db, viewerId),
+          likesCount: 0,
+          likedByMe: false,
+          replies: [],
         },
       };
     }
   }
 
-  const deleteCommentMatch = path.match(/^\/api\/comments\/([^/]+)$/);
-  if (deleteCommentMatch && method === "DELETE") {
-    const cid = deleteCommentMatch[1];
-    db.comments = db.comments.filter((c) => c.id !== cid);
-    saveDb(db);
-    return { ok: true };
-  }
-
   // --- 5. STORIES, NOTIFICATIONS, FRIEND REQUESTS, UPLOAD ---
   if (path === "/api/stories" && method === "GET") {
-    // Group stories by user
-    const userGroups = [];
     const grouped = {};
     for (const s of db.stories) {
       if (!grouped[s.userId]) grouped[s.userId] = [];
       grouped[s.userId].push(s);
     }
+    const userGroups = [];
     for (const [uid, items] of Object.entries(grouped)) {
       const user = db.users.find((u) => u.id === uid);
       if (user) {
@@ -571,13 +706,11 @@ export async function handleMockRequest(url, options = {}) {
   }
 
   if (path === "/api/upload" && method === "POST") {
-    // If FormData with files
     const urls = [];
     if (body instanceof FormData) {
       const files = body.getAll("files");
       for (const file of files) {
         if (typeof file === "object" && file.name) {
-          // Read as data URL
           const dataUrl = await new Promise((resolve) => {
             const reader = new FileReader();
             reader.onload = () => resolve(reader.result);
