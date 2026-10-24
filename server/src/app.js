@@ -19,6 +19,7 @@ import * as engage from "./controllers/engagementController.js";
 import * as upload from "./controllers/uploadController.js";
 import * as stories from "./controllers/storyController.js";
 import * as misc from "./controllers/miscController.js";
+import * as messages from "./controllers/messageController.js";
 import {
   commentIdParamSchema,
   commentListSchema,
@@ -167,6 +168,26 @@ export function createApp() {
 
   // Stories, notifications, uploads
   app.get("/api/stories", requireAuth, stories.listStories);
+  app.post("/api/stories", requireAuth, stories.createStory);
+  app.post("/api/stories/:storyId/view", requireAuth, stories.recordStoryView);
+  app.get("/api/stories/:storyId/viewers", requireAuth, stories.getStoryViewers);
+  app.post("/api/stories/:storyId/react", requireAuth, stories.reactToStory);
+
+  // Direct Messages
+  app.get("/api/conversations", requireAuth, messages.listConversations);
+  app.get("/api/messages/:recipientId", requireAuth, messages.getMessages);
+  app.post("/api/messages", requireAuth, messages.sendMessageRest);
+
+  // Moderation & Safety (Block, Mute, Report)
+  app.post("/api/users/:id/block", requireAuth, validate(idParamSchema), users.blockUser);
+  app.delete("/api/users/:id/block", requireAuth, validate(idParamSchema), users.unblockUser);
+  app.post("/api/users/:id/mute", requireAuth, validate(idParamSchema), users.muteUser);
+  app.delete("/api/users/:id/mute", requireAuth, validate(idParamSchema), users.unmuteUser);
+  app.post("/api/reports", requireAuth, users.reportEntity);
+
+  // Search
+  app.get("/api/search", optionalAuth, users.search);
+
   app.get("/api/notifications", requireAuth, misc.listNotifications);
   app.post("/api/notifications/read", requireAuth, misc.markNotificationsRead);
   app.get("/api/friend-requests", requireAuth, misc.listFriendRequests);

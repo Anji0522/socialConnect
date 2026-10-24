@@ -5,6 +5,7 @@ import { ThemeToggle } from "@/components/ThemeToggle";
 import { UserSuggestionCard } from "@/components/UserSuggestionCard";
 import { Avatar } from "@/components/ui/Avatar";
 import { useAuth } from "@/context/AuthContext";
+import { useSocket } from "@/context/SocketContext";
 import { api } from "@/lib/api";
 import {
   Bell,
@@ -31,6 +32,7 @@ const nav = [
 
 export function AppLayout() {
   const { user, logout } = useAuth();
+  const { unreadMsgCount } = useSocket();
   const [suggestions, setSuggestions] = useState([]);
   const [requests, setRequests] = useState([]);
   const [notes, setNotes] = useState([]);
@@ -64,6 +66,9 @@ export function AppLayout() {
               >
                 <item.icon className="h-5 w-5" />
                 {item.label}
+                {item.label === "Messages" && unreadMsgCount > 0 && (
+                  <span className="ml-auto rounded-full bg-primary px-2 text-xs text-white">{unreadMsgCount}</span>
+                )}
                 {item.label === "Notifications" && unread > 0 && (
                   <span className="ml-auto rounded-full bg-primary px-2 text-xs text-white">{unread}</span>
                 )}

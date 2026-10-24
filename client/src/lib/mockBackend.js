@@ -676,7 +676,190 @@ export async function handleMockRequest(url, options = {}) {
     }
   }
 
-  // --- 5. STORIES, NOTIFICATIONS, FRIEND REQUESTS, UPLOAD ---
+  // --- 5. DIRECT MESSAGES ---
+  if (!db.messages) db.messages = [];
+  if (!db.conversations) db.conversations = [];
+  if (!db.storyViews) db.storyViews = [];
+  if (!db.reports) db.reports = [];
+
+  if (path === "/api/conversations" && method === "GET") {
+    // Generate active conversations from other users
+    const otherUsers = db.users.filter((u) => u.id !== viewerId).slice(0, 6);
+    const convs = otherUsers.map((other, idx) => {
+      const userMessages = db.messages.filter(
+        (m) => (m.senderId === viewerId && m.recipientId === other.id) || (m.senderId === other.id && m.recipientId === viewerId)
+      );
+      const lastMsg = userMessages[userMessages.length - 1] || {
+        id: `msg_seed_${idx}`,
+        text: idx % 2 === 0 ? "Hey! Loved your recent post." : "Are you around this weekend?",
+        createdAt: new Date(Date.now() - (idx + 1) * 3600000).toISOString(),
+        senderId: other.id,
+      };
+      return {
+        id: `conv_${other.id}`,
+        otherUser: publicProfile(other, db, viewerId),
+        lastMessage: lastMsg,
+        unreadCount: idx === 0 ? 1 : 0,
+        updatedAt: lastMsg.createdAt,
+      };
+    });
+    return { conversations: convs };
+  }
+
+  const messagesMatch = path.match(/^\/api\/messages\/([^/]+)$/);
+  if (messagesMatch && method === "GET") {
+    const recipientId = messagesMatch[1];
+    const msgs = db.messages
+      .filter(
+        (m) =>
+          (m.senderId === viewerId && m.recipientId === recipientId) ||
+          (m.senderId === recipientId && m.recipientId === viewerId)
+      )
+      .sort((a, b) => new Date(a.createdAt) - new Date(b.createdAt));
+
+    // If no messages yet, seed an initial friendly greeting
+    if (msgs.length === 0) {
+      const otherUser = db.users.find((u) => u.id === recipientId);
+      if (otherUser) {
+        msgs.push({
+          id: `seed_msg_${recipientId}`,
+          senderId: recipientId,
+          recipientId: viewerId,
+          sender: publicProfile(otherUser, db, viewerId),
+          text: `Hey @${viewerId === "usr_demo" ? "demo" : "there"}, welcome to SocialConnect! Feel free to message me anytime.`,
+          seen: true,
+          createdAt: new Date(Date.now() - 3600000).toISOString(),
+        });
+      }
+    }
+
+    return {
+      conversationId: `conv_${recipientId}`,
+      messages: msgs,
+    };
+  }
+
+  if (path === "/api/messages" && method === "POST") {
+    const { recipientId, text, mediaUrl } = body;
+    const newMsg = {
+      id: `msg_${Date.now()}`,
+      senderId: viewerId,
+      recipientId,
+      text: text || "",
+      mediaUrl: mediaUrl || "",
+      seen: false,
+      createdAt: new Date().toISOString(),
+    };
+    db.messages.push(newMsg);
+    saveDb(db);
+    return { message: newMsg };
+  }
+
+  // --- 6. SAFETY & MODERATION (Block, Mute, Report) ---
+  const blockMatch = path.match(/^\/api\/users\/([^/]+)\/block$/);
+  if (blockMatch) {
+    const targetId = blockMatch[1];
+    const user = db.users.find((u) => u.id === viewerId);
+    if (!user.blockedUsers) user.blockedUsers = [];
+    if (method === "POST") {
+      if (!user.blockedUsers.includes(targetId)) user.blockedUsers.push(targetId);
+      saveDb(db);
+      return { blocked: true };
+    }
+    if (method === "DELETE") {
+      user.blockedUsers = user.blockedUsers.filter((id) => id !== targetId);
+      saveDb(db);
+      return { blocked: false };
+    }
+  }
+
+  const muteMatch = path.match(/^\/api\/users\/([^/]+)\/mute$/);
+  if (muteMatch) {
+    const targetId = muteMatch[1];
+    const user = db.users.find((u) => u.id === viewerId);
+    if (!user.mutedUsers) user.mutedUsers = [];
+    if (method === "POST") {
+      if (!user.mutedUsers.includes(targetId)) user.mutedUsers.push(targetId);
+      saveDb(db);
+      return { muted: true };
+    }
+    if (method === "DELETE") {
+      user.mutedUsers = user.mutedUsers.filter((id) => id !== targetId);
+      saveDb(db);
+      return { muted: false };
+    }
+  }
+
+  if (path === "/api/reports" && method === "POST") {
+    db.reports.push({
+      id: `rep_${Date.now()}`,
+      reporter: viewerId,
+      targetUserId: body.targetUserId,
+      reason: body.reason,
+      createdAt: new Date().toISOString(),
+    });
+    saveDb(db);
+    return { message: "Report submitted successfully for safety review." };
+  }
+
+  // --- 7. SEARCH ---
+  if (path === "/api/search" && method === "GET") {
+    const q = (query.q || "").toLowerCase().replace(/^[#@]/, "").trim();
+    const matchedUsers = db.users.filter(
+      (u) => u.name.toLowerCase().includes(q) || u.username.toLowerCase().includes(q)
+    );
+    const hashtags = [
+      { tag: "travel", postCount: 24 },
+      { tag: "photo", postCount: 19 },
+      { tag: "design", postCount: 15 },
+      { tag: "buildinpublic", postCount: 12 },
+      { tag: "coffee", postCount: 9 },
+      { tag: "community", postCount: 7 },
+    ].filter((h) => !q || h.tag.includes(q));
+
+    return {
+      users: matchedUsers.map((u) => publicProfile(u, db, viewerId)),
+      hashtags,
+      trending: hashtags.slice(0, 5),
+    };
+  }
+
+  // --- 8. STORIES, NOTIFICATIONS, FRIEND REQUESTS, UPLOAD ---
+  if (path === "/api/stories" && method === "POST") {
+    const newStory = {
+      id: `story_${Date.now()}`,
+      userId: viewerId,
+      mediaUrl: body.mediaUrl,
+      createdAt: new Date().toISOString(),
+      expiresAt: new Date(Date.now() + 86400000).toISOString(),
+    };
+    db.stories.unshift(newStory);
+    saveDb(db);
+    return { story: newStory };
+  }
+
+  const storyViewMatch = path.match(/^\/api\/stories\/([^/]+)\/view$/);
+  if (storyViewMatch && method === "POST") {
+    const storyId = storyViewMatch[1];
+    db.storyViews.push({ storyId, viewerId, viewedAt: new Date().toISOString() });
+    saveDb(db);
+    return { ok: true };
+  }
+
+  const storyViewersMatch = path.match(/^\/api\/stories\/([^/]+)\/viewers$/);
+  if (storyViewersMatch && method === "GET") {
+    const viewers = db.users.slice(1, 4).map((u) => ({
+      user: publicProfile(u, db, viewerId),
+      viewedAt: new Date(Date.now() - 1800000).toISOString(),
+    }));
+    return { viewers };
+  }
+
+  const storyReactMatch = path.match(/^\/api\/stories\/([^/]+)\/react$/);
+  if (storyReactMatch && method === "POST") {
+    return { ok: true };
+  }
+
   if (path === "/api/stories" && method === "GET") {
     const grouped = {};
     for (const s of db.stories) {

@@ -1,5 +1,5 @@
 import mongoose from "mongoose";
-import { Bookmark, Comment, Hashtag, Like, Post } from "../models/index.js";
+import { Bookmark, Comment, Follow, Hashtag, Like, Post, User } from "../models/index.js";
 import { AppError, asyncHandler } from "../utils/errors.js";
 import { bumpHashtags, extractHashtags } from "../utils/hashtags.js";
 import {
@@ -34,6 +34,16 @@ export const createPost = asyncHandler(async (req, res) => {
 export const getPost = asyncHandler(async (req, res) => {
   const post = await Post.findById(req.params.id).populate("userId");
   if (!post) throw new AppError(404, "Post not found");
+
+  // If author blocked viewer or viewer blocked author, 404
+  if (
+    req.user &&
+    (req.user.blockedUsers?.map((b) => b.toString()).includes(post.userId?._id?.toString()) ||
+      post.userId?.blockedUsers?.map((b) => b.toString()).includes(req.user.id))
+  ) {
+    throw new AppError(404, "Post not found");
+  }
+
   const [serialized] = await serializePosts([post], req.user?.id);
   res.json({ post: serialized });
 });
@@ -73,7 +83,23 @@ export const deletePost = asyncHandler(async (req, res) => {
 });
 
 export const getUserPosts = asyncHandler(async (req, res) => {
-  const posts = await Post.find({ userId: req.params.id }).sort({ createdAt: -1, _id: -1 }).limit(30).populate("userId");
+  const targetUser = await User.findById(req.params.id);
+  if (!targetUser) throw new AppError(404, "User not found");
+
+  // Check private account access
+  if (targetUser.isPrivate && req.user?.id !== targetUser.id) {
+    const isFollower = req.user
+      ? await Follow.exists({ followerId: req.user._id, followingId: targetUser._id })
+      : false;
+    if (!isFollower) {
+      return res.json({ posts: [], privateAccount: true });
+    }
+  }
+
+  const posts = await Post.find({ userId: req.params.id })
+    .sort({ createdAt: -1, _id: -1 })
+    .limit(30)
+    .populate("userId");
   res.json({ posts: await serializePosts(posts, req.user?.id) });
 });
 
@@ -86,7 +112,13 @@ export const getSavedPosts = asyncHandler(async (req, res) => {
 
 export const getExploreFeed = asyncHandler(async (req, res) => {
   const limit = Number(req.query.limit) || 24;
-  const posts = await Post.find({})
+  const blocked = req.user?.blockedUsers || [];
+
+  // Exclude private accounts (unless own) and blocked users from public explore
+  const privateUsers = await User.find({ isPrivate: true, _id: { $ne: req.user?._id } }).select("_id");
+  const excludeUserIds = [...blocked, ...privateUsers.map((u) => u._id)];
+
+  const posts = await Post.find({ userId: { $nin: excludeUserIds } })
     .sort({ createdAt: -1 })
     .limit(limit)
     .populate("userId");
@@ -95,7 +127,10 @@ export const getExploreFeed = asyncHandler(async (req, res) => {
 
 export const getFeed = asyncHandler(async (req, res) => {
   const { cursor, tab, limit } = req.query;
-  const ids = await getFollowingIds(req.user.id, true);
+  const rawIds = await getFollowingIds(req.user.id, true);
+  const blockedSet = new Set((req.user.blockedUsers || []).map((b) => b.toString()));
+  const ids = rawIds.filter((id) => !blockedSet.has(id.toString()));
+
   const match = { userId: { $in: ids } };
   const decoded = decodeCursor(cursor);
   if (decoded) {

@@ -4,6 +4,7 @@ import { useAuth } from "@/context/AuthContext";
 import {
   Bookmark,
   Check,
+  Flag,
   Heart,
   MapPin,
   MessageCircle,
@@ -123,32 +124,49 @@ export function PostCard({ post, onDelete, onUpdate }) {
             </div>
           </div>
         </Link>
-        {mine && (
-          <div className="relative">
-            <Button variant="ghost" size="icon" aria-label="Post actions" onClick={() => setMenu((m) => !m)}>
-              <MoreHorizontal className="h-4 w-4" />
-            </Button>
-            {menu && (
-              <div className="absolute right-0 z-10 w-36 rounded-xl border bg-card p-1 shadow-card">
+        <div className="relative">
+          <Button variant="ghost" size="icon" aria-label="Post actions" onClick={() => setMenu((m) => !m)}>
+            <MoreHorizontal className="h-4 w-4" />
+          </Button>
+          {menu && (
+            <div className="absolute right-0 z-10 w-36 rounded-xl border bg-card p-1 shadow-card text-xs">
+              {mine ? (
+                <>
+                  <button
+                    className="flex w-full items-center gap-2 rounded-lg px-3 py-2 hover:bg-muted"
+                    onClick={() => {
+                      setEditing(true);
+                      setMenu(false);
+                    }}
+                  >
+                    <Pencil className="h-3.5 w-3.5" /> Edit
+                  </button>
+                  <button
+                    className="flex w-full items-center gap-2 rounded-lg px-3 py-2 text-destructive hover:bg-muted"
+                    onClick={remove}
+                  >
+                    <Trash2 className="h-3.5 w-3.5" /> Delete
+                  </button>
+                </>
+              ) : (
                 <button
-                  className="flex w-full items-center gap-2 rounded-lg px-3 py-2 text-sm hover:bg-muted"
-                  onClick={() => {
-                    setEditing(true);
+                  className="flex w-full items-center gap-2 rounded-lg px-3 py-2 text-destructive hover:bg-muted"
+                  onClick={async () => {
                     setMenu(false);
+                    try {
+                      await api.post("/api/reports", { targetPostId: post.id, reason: "Inappropriate content" });
+                      alert("Post reported for moderation review.");
+                    } catch {
+                      // ignore
+                    }
                   }}
                 >
-                  <Pencil className="h-4 w-4" /> Edit
+                  <Flag className="h-3.5 w-3.5" /> Report post
                 </button>
-                <button
-                  className="flex w-full items-center gap-2 rounded-lg px-3 py-2 text-sm text-destructive hover:bg-muted"
-                  onClick={remove}
-                >
-                  <Trash2 className="h-4 w-4" /> Delete
-                </button>
-              </div>
-            )}
-          </div>
-        )}
+              )}
+            </div>
+          )}
+        </div>
       </div>
 
       {editing ? (
